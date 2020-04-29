@@ -1,0 +1,51 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <% if params[:type] == "selling" %>
+        <h2>나의상품</h2>
+      <% elsif @category %>
+        <h2><%= @category.title %></h2>
+      <% end %>
+      <hr>
+      <%= form_tag request.parameters, method: :get do%>
+        <div class="form-inline">
+          <%= text_field_tag :q, params[:q], class: "form-control mr-1" %>
+          <%= submit_tag "검색", class: "btn btn-primary mr-1" %>
+          <div class="float-right">
+            <div class="button-group">
+              <%= link_to "가격순", request.parameters.merge(order: :price), class: "btn btn-secondary" %>
+              <%= link_to "등록순", request.parameters.merge(order: nil), class: "btn btn-light" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <%= link_to "상품 등록", new_item_path, class: "btn btn-primary float-right" %>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <% @items.each do |item| %>
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <img src="<%= item.image.url(:thumb) if item.image? %>" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title"><%= item.title %></h5>
+          <div class="card-subtitle">
+            판매자: <%= item.user&.email %>
+          </div>
+          <p class="card-text"><%= item.description %></p>
+          <p class="text-muted"><%= number_with_delimiter item.price %></p>
+        </div>
+        <div class="card-footer">
+          <%= link_to "자세히보기", item, class: "btn btn-primary" %>
+          <% if item.user == current_user %>
+            <%= link_to "수정", edit_item_path(item), class: "btn btn-danger" %>
+            <%= link_to "삭제", item, mothod: :delete, data: {confirm: "정말 삭제하겠습니까?"}, class: "btn btn-secondary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-4">
+      <%= image_tag @item.image.url, class: "img-thumbnail img-fluid" %>
+    </div>
+    <div class="col-md-8">
+      <h4><%= @item.title %></h4>
+      <p><%= number_with_delimiter @item.price %>원</p>
+      <p><%= @item.description %></p>
+
+      <%= link_to current_user.has_item?(@item) ? "찜취소하기" : "찜하기", toggle_item_path(@item), class: "btn btn-secondary" %>
+      <%= link_to "장바구니 담기", add_item_path(@item), class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>
